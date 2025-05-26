@@ -5,7 +5,11 @@ fs.access(stats, fs.F_OK, (err) => {
     throw new Error('Hugo stats file not found, please turn on the "build.writeStats". See also https://hbs.razonyang.com/v1/en/docs/getting-started/prerequisites/#configuration.')
   }
 });
-const purgecss = require('@fullhuman/postcss-purgecss')({
+
+// 👇 Fix: .default के साथ import करें
+const purgecssPlugin = require('@fullhuman/postcss-purgecss').default;
+
+const purgecss = purgecssPlugin({
   content: [ stats, "./extra_stats.json" ],
   defaultExtractor: (content) => {
       let els = JSON.parse(content).htmlElements;
@@ -35,7 +39,6 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
       'w-100',
       'was-validated',
     ],
-    // deep: [/blue$/],
     greedy: [/carousel-indicators$/]
   },
   dynamicAttributes: ['data-bs-popper', 'data-bs-theme', 'data-palette', 'role', 'placeholder-shown']
